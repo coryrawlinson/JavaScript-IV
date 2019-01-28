@@ -12,18 +12,29 @@ class Person{
     }
 }
 
-class Instructor extends Person{
-    constructor(instructorAttrs){
+class Instructor extends Person {
+    constructor(instructorAttrs) {
         super(instructorAttrs);
         this.specialty = instructorAttrs.specialty;
         this.favLanguage = instructorAttrs.favLanguage;
         this.catchPhrase = instructorAttrs.catchPhrase;
     }
-    demo(subject){
+    demo(subject) {
         return `Today we are learning about ${subject}`;
     }
-    grade(student, subject){
+    grade(student, subject) {
         return `${student.name} receives a perfect score on ${subject}`;
+    }
+    editGrade(student) {
+        let randomNumber = Math.random() * (10 - 1) + 1;
+        let addOrSubtract = Math.random() * (2 - 1) + 1;
+        if (addOrSubtract > 1.5) {
+            student.grade -= randomNumber
+            return student.grade;
+        } else if (addOrSubtract < 1.5) {
+            student.grade += randomNumber;
+            return student.grade;
+        }
     }
 }
 
@@ -33,9 +44,13 @@ class Student extends Person{
         this.previousBackground = studentAttrs.previousBackground;
         this.className = studentAttrs.className;
         this.favSubjects = studentAttrs.favSubjects;
+        this.grade = studentAttrs.grade;
     }
     listsSubjects(){
         for(let i in this.favSubjects){
+            if(i == this.favSubjects.length -1){
+                return this.favSubjects[i];
+              }
             console.log(this.favSubjects[i]);
         }
     }
@@ -44,6 +59,14 @@ class Student extends Person{
     }
     sprintChallenge(subject){
         return `${this.name} has begun their Sprint Challenge on ${subject}`;
+    }
+    graduate(student){
+        while(this.grade < 70){
+            Cam.editGrade(student);
+            if(this.grade > 70){
+                return `${this.name} graduated from Lambda school with ${this.grade}%! Great job`
+            }
+        }
     }
 }
 
@@ -78,7 +101,8 @@ const Cory = new Student({
     gender: 'male',
     previousBackground: 'Cinematography',
     className: "WEBPT4",
-    favSubjects: ['CSS', 'Javascript']
+    favSubjects: ['CSS', 'Javascript'],
+    grade: 40,
 });
 
 const Carlos = new ProjectManager({
@@ -88,7 +112,7 @@ const Carlos = new ProjectManager({
     gender: 'male',
     favLanguage: ['Javascript','Python','SQL','Java'],
     specialty: 'JavaScript',
-    catchPhrase: '.this is amazing!',
+    catchPhrase: 'This is amazing!',
     grandClassName: 'WEBPT',
     favInstructor: 'Cam Pope'
 });
@@ -99,5 +123,10 @@ console.log(Cam.grade(Cory, 'JavaScript')); //`Cory Rawlinson receives a perfect
 console.log(Carlos.speak()); //`Hello my name is Carlos Lantigua and I live in North Carolina`
 console.log(Cory.listsSubjects()); // 'CSS' 'Javascript'
 console.log(Cory.previousBackground); // 'Cinematography'
-console.log(Carlos.favInstructor)// 'Cam Pope'
-console.log(Carlos.debugsCode(Cory, 'Python'))// `Carlos Lantigua debugs Cory Rawlinson's code on Python`
+console.log(Carlos.favInstructor);// 'Cam Pope'
+console.log(Carlos.debugsCode(Cory, 'Python'));// `Carlos Lantigua debugs Cory Rawlinson's code on Python`
+console.log(Cam.editGrade(Cory)); // Will log 40 + or - a random number between 1-100 //this will be starting grade
+console.log(Carlos.editGrade(Cory)); // Will log 40 + or - a random number between 1-100 //this will be starting grade
+console.log(Cory.graduate(Cory)) //will go through a while loop until grade is > 70
+
+
